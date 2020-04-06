@@ -1,0 +1,243 @@
+call plug#begin('~/.vim/plugged')
+" Plugin outside ~/.vim/plugged with post-update hook
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'sheerun/vim-polyglot'
+Plug 'tpope/vim-endwise' 
+Plug 'rakr/vim-one'
+Plug 'justinmk/vim-dirvish'
+Plug 'tpope/vim-eunuch'
+Plug 'itchyny/lightline.vim'
+Plug 'mhinz/vim-signify'
+Plug 'w0rp/ale'
+Plug 'tpope/vim-fugitive'
+Plug 'jiangmiao/auto-pairs'
+"Plug 'ludovicchabant/vim-gutentags'
+Plug 'tpope/vim-rails', { 'for': 'ruby' }
+Plug 'mattn/emmet-vim'
+Plug 'tpope/vim-surround'
+Plug 'scrooloose/nerdcommenter'
+"Plug 'scrooloose/nerdtree'
+Plug 'JamshedVesuna/vim-markdown-preview'
+Plug 'mtth/scratch.vim'
+Plug 'Yggdroot/indentLine'
+" Initialize plugin system
+call plug#end()
+
+let mapleader = ","
+let maplocalleader = ","
+let vim_markdown_preview_github=1
+let vim_markdown_preview_browser='Google Chrome'
+let g:airline_theme='one'
+
+set autoindent
+set autoread
+set autoread
+set autowrite
+set backspace=indent,eol,start
+set clipboard+=unnamedplus
+set encoding=utf-8
+set expandtab
+set formatoptions=""
+set hidden
+set history=50
+set ignorecase
+set incsearch
+set laststatus=2
+set lazyredraw
+set list
+" set mouse=a in all modes..
+set mouse=n
+set nobackup
+set nocursorline
+set nojoinspaces
+set noswapfile
+set nowrap
+set nowritebackup
+set number
+set numberwidth=5
+set pumheight=4
+set relativenumber
+set scrolloff=5
+set shell=bash
+set shiftround
+set shiftwidth=2
+set shortmess=aIT
+set showcmd
+set showmatch
+set smartcase
+set smartindent
+set tabstop=2
+set title
+set ts=2 sw=2 et
+set ttimeout
+set ttimeoutlen=100
+set undolevels=1000
+set visualbell
+set wildmenu
+set tags=./tags;/
+set nostartofline
+
+set textwidth=0
+if exists('&colorcolumn')
+  set colorcolumn=80
+endif
+
+" Tabstop for files
+autocmd Filetype eruby setlocal ts=4 sw=4 sts=0 expandtab
+autocmd Filetype html setlocal ts=4 sw=4 sts=0 expandtab
+autocmd Filetype java setlocal ts=4 sw=4 sts=0 expandtab
+
+"colorscheme troy-dark-one
+"colorscheme one-dark
+colorscheme one
+"colorscheme one
+syntax enable
+
+map <leader>vi :tabe ~/.config/nvim/init.vim<CR>
+map <leader>svi :so ~/.config/nvim/init.vim<CR>
+map <leader>vs :vsplit<CR>
+" map <leader>hs :split<CR>
+map <leader>t :tabe<CR>
+
+
+map <leader>ag :Ag<CR>
+" map <leader>fw :Windows<CR>
+" map <leader>fg :GFiles<CR>
+" map <leader>fz :GFiles?<CR>
+" map <leader>fh :History:<CR>
+" map <leader>fm :Marks<CR>
+" map <leader>fmm :Maps<CR>
+ map <leader>fco :Colors<CR>
+" map <leader>fcc :Commits<CR>
+" map <leader>fcb :BCommits<CR>
+ map <leader>ff :FZF<CR>
+ map <leader>ft :Tags<CR>
+ map <leader>fb :Buffers<CR>
+"
+" Open new split panes to right and bottom, which feels more natural
+set splitbelow
+set splitright
+
+" Quicker window movement
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-h> <C-w>h
+nnoremap <C-l> <C-w>l
+" if has('nvim')
+"   nmap <BS> <C-W>h
+" endif
+
+"  Bind K to grep word under cursor
+nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+noremap <space> :
+" The Silver Searcher
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+endif
+
+" ----------------------------------------------------------------------------
+" Neovim Terminal
+" ----------------------------------------------------------------------------
+" highlight TermCursor ctermfg=red guifg=red
+"au BufEnter * if &buftype == 'terminal' | :startinsert | endif
+autocmd TermOpen * set bufhidden=hide
+tnoremap <C-j> <C-\><C-n><C-w>j
+tnoremap <C-h> <C-\><C-n><C-w>h
+tnoremap <C-k> <C-\><C-n><C-w>k
+tnoremap <C-l> <C-\><C-n><C-w>l
+
+let g:lightline = {
+      \ 'colorscheme': 'one',
+      \ 'mode_map': { 'c': 'NORMAL' },
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
+      \ },
+      \ 'component_function': {
+      \   'modified': 'LightlineModified',
+      \   'readonly': 'LightlineReadonly',
+      \   'fugitive': 'LightlineFugitive',
+      \   'filename': 'LightlineFilename',
+      \   'fileformat': 'LightlineFileformat',
+      \   'filetype': 'LightlineFiletype',
+      \   'fileencoding': 'LightlineFileencoding',
+      \   'mode': 'LightlineMode',
+      \ }
+      \ }
+
+
+function! LightlineModified()
+  return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+endfunction
+
+function! LightlineReadonly()
+  return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? ' ' : ''
+endfunction
+
+function! LightlineFilename()
+  return ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
+        \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
+        \  &ft == 'unite' ? unite#get_status_string() :
+        \  &ft == 'vimshell' ? vimshell#get_status_string() :
+        \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
+        \ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
+endfunction
+
+function! LightlineFugitive()
+  if &ft !~? 'vimfiler\|gundo' && exists("*fugitive#head")
+    let branch = fugitive#head()
+    return branch !=# '' ? ' '.branch : ''
+  endif
+  return ''
+endfunction
+
+function! LightlineFileformat()
+  return winwidth(0) > 70 ? &fileformat : ''
+endfunction
+
+function! LightlineFiletype()
+  return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+endfunction
+
+function! LightlineFileencoding()
+  return winwidth(0) > 70 ? (&fenc !=# '' ? &fenc : &enc) : ''
+endfunction
+
+function! LightlineMode()
+  return winwidth(0) > 60 ? lightline#mode() : ''
+endfunction
+
+
+" ----------------------------------------------------------------------------
+" <Leader>?/! | Google it / Feeling lucky
+" ----------------------------------------------------------------------------
+function! s:goog(pat, lucky)
+  let q = '"'.substitute(a:pat, '["\n]', ' ', 'g').'"'
+  let q = substitute(q, '[[:punct:] ]',
+       \ '\=printf("%%%02X", char2nr(submatch(0)))', 'g')
+  call system(printf('open "https://www.google.com/search?%sq=%s"',
+                   \ a:lucky ? 'btnI&' : '', q))
+endfunction
+
+nnoremap <leader>? :call <SID>goog(expand("<cWORD>"), 0)<cr>
+nnoremap <leader>! :call <SID>goog(expand("<cWORD>"), 1)<cr>
+xnoremap <leader>? "gy:call <SID>goog(@g, 0)<cr>gv
+xnoremap <leader>! "gy:call <SID>goog(@g, 1)<cr>gv
+
+" Always use vertical diffs
+set diffopt+=vertical
+
+highlight clear ALEErrorSign
+highlight clear ALEWarningSign
+let g:ale_sign_error = '✗'
+let g:ale_sign_warning = '⚠'
+let g:ale_sign_column_always = 1
+
+let g:user_emmet_expandabbr_key = ',l'

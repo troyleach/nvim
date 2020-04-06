@@ -1,0 +1,134 @@
+" ----------------------------------------------------------------------------
+"
+" Plugins
+" ----------------------------------------------------------------------------
+call plug#begin('~/.vim/plugged')
+" Not sure I like the color scheme but I can always come back to this..
+"Plug 'dracula/vim'
+"Plug 'alduin/vim'
+Plug 'rafi/awesome-vim-colorschemes'
+
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+
+"NerdTree
+Plug 'scrooloose/nerdtree'
+Plug 'ryanoasis/vim-devicons'
+
+" For my status bar
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+" Initialize plugin system
+call plug#end()
+
+let mapleader = ","
+let maplocalleader = ","
+let vim_markdown_preview_github=1
+let vim_markdown_preview_browser='Google Chrome'
+
+"for status bar below
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
+
+set mouse=n
+
+" This sets the width I can write code
+set textwidth=0
+if exists('&colorcolumn')
+  set colorcolumn=80
+endif
+
+if (has("termguicolors"))
+ set termguicolors
+endif
+syntax enable
+"colorscheme dracula
+let g:alduin_Shout_Dragon_Aspect = 1
+colorscheme alduin
+
+
+" ----------------------------------------------------------------------------
+" NerdTree
+" ----------------------------------------------------------------------------
+let g:NERDTreeShowHidden = 1
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeIgnore = []
+let g:NERDTreeStatusline = ''
+" Automaticaly close nvim if NERDTree is only thing left open
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" Toggle
+nnoremap <silent> <C-b> :NERDTreeToggle<CR>
+
+
+map <leader>vi :tabe ~/.config/nvim/init.vim<CR>
+map <leader>svi :so ~/.config/nvim/init.vim<CR>
+" split right
+map <leader>vs :vsplit<CR>
+" split below
+map <leader>hs :split<CR>
+" Open a new tab
+map <leader>t :tabe<CR>
+
+
+" chnage colors, this might go away
+ map <leader>fco :Colors<CR>
+
+" Open new split panes to right and bottom, which feels more natural
+set splitbelow
+set splitright
+set number
+
+" Quicker window movement
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-h> <C-w>h
+nnoremap <C-l> <C-w>l
+
+"  Bind K to grep word under cursor
+nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+noremap <space> :
+" The Silver Searcher
+
+" ----------------------------------------------------------------------------
+" Neovim Terminal
+" ----------------------------------------------------------------------------
+" highlight TermCursor ctermfg=red guifg=red
+"au BufEnter * if &buftype == 'terminal' | :startinsert | endif
+autocmd TermOpen * set bufhidden=hide
+tnoremap <C-j> <C-\><C-n><C-w>j
+tnoremap <C-h> <C-\><C-n><C-w>h
+tnoremap <C-k> <C-\><C-n><C-w>k
+tnoremap <C-l> <C-\><C-n><C-w>l
+
+" ----------------------------------------------------------------------------
+" <Leader>?/! | Google it / Feeling lucky
+" super cool, cursor in word you want to look up then <leader>? will google
+" that word
+" ----------------------------------------------------------------------------
+function! s:goog(pat, lucky)
+  let q = '"'.substitute(a:pat, '["\n]', ' ', 'g').'"'
+  let q = substitute(q, '[[:punct:] ]',
+       \ '\=printf("%%%02X", char2nr(submatch(0)))', 'g')
+  call system(printf('open "https://www.google.com/search?%sq=%s"',
+                   \ a:lucky ? 'btnI&' : '', q))
+endfunction
+
+nnoremap <leader>? :call <SID>goog(expand("<cWORD>"), 0)<cr>
+nnoremap <leader>! :call <SID>goog(expand("<cWORD>"), 1)<cr>
+xnoremap <leader>? "gy:call <SID>goog(@g, 0)<cr>gv
+xnoremap <leader>! "gy:call <SID>goog(@g, 1)<cr>gv
+
+
+" ----------------------------------------------------------------------------
+" WEBSITES TO THE PLUGIN
+"
+" this was to get the fonts to work for nerdtree, altered my terminal profile
+" https://github.com/ryanoasis/vim-devicons
+" https://github.com/ryanoasis/nerd-fonts#font-installation
+" Go here to see more color themes then type ,fco to get new ones
+" 
+" Arline themes for the status bar below and I think above
+" https://github.com/vim-airline/vim-airline/wiki/Screenshots
+" To change themes do this:
+" :AirlineTheme <theme>
+" ----------------------------------------------------------------------------
