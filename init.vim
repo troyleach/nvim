@@ -1,134 +1,160 @@
-" ----------------------------------------------------------------------------
-"
-" Plugins
-" ----------------------------------------------------------------------------
-call plug#begin('~/.vim/plugged')
-" Not sure I like the color scheme but I can always come back to this..
-"Plug 'dracula/vim'
-"Plug 'alduin/vim'
-Plug 'rafi/awesome-vim-colorschemes'
+" - - - - - - - - - - - - - - - - - - - - -
+" this is what I used to set up the inital file
+"   https://www.youtube.com/watch?v=ZEFXeRIFvN0
+" used this for fzf fuzzy search
+"   https://pragmaticpineapple.com/improving-vim-workflow-with-fzf/
+" - - - - - - - - - - - - - - - - - - - - -
 
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+set nocompatible		" be iMproved, required
+filetype off			  " required
+
+" - - - - - - - - - - - - - - - - - - - - -
+" Plug in for this mean stuff
+" - - - - - - - - - - - - - - - - - - - - -
+call plug#begin('~/.config/nvim/plugged')
+" theme stuff
+Plug 'morhetz/gruvbox'
+Plug 'itchyny/lightline.vim'
+
+" github
+Plug 'tpope/vim-fugitive'
+Plug 'preservim/nerdtree'
+
+" I think there is a better way to search other then this ctrl p thing
+" Plug 'ctrlpvim/ctrlp.vim' DELETE 
+"
+" Not sure about this one either, doesn't seem to work to well
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" s
+" fzf search
+" must install silver_searcher https://github.com/ggreer/the_silver_searcher
+" brew install the_silver_searcher
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
-"NerdTree
-Plug 'scrooloose/nerdtree'
-Plug 'ryanoasis/vim-devicons'
+" close brackets
+Plug 'jiangmiao/auto-pairs'
 
-" For my status bar
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+" comment out code
+Plug 'tpope/vim-commentary'
+
+" add the end for ruby
+Plug 'tpope/vim-endwise'
+
+" adding dash docs to vim - leader d then watch the magic yo
+Plug 'rizzatti/dash.vim'
+
+
 " Initialize plugin system
 call plug#end()
 
-let mapleader = ","
-let maplocalleader = ","
-let vim_markdown_preview_github=1
-let vim_markdown_preview_browser='Google Chrome'
+colorscheme gruvbox
 
-"for status bar below
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
-
-set mouse=n
-
-" This sets the width I can write code
-set textwidth=0
-if exists('&colorcolumn')
-  set colorcolumn=80
-endif
-
-if (has("termguicolors"))
- set termguicolors
-endif
-syntax enable
-"colorscheme dracula
-let g:alduin_Shout_Dragon_Aspect = 1
-colorscheme alduin
+" - - - - - - - - - - - - - - - - - - - - -
+" Terminal
+" - - - - - - - - - - - - - - - - - - - - -
+" open a terminal in $PWD
 
 
-" ----------------------------------------------------------------------------
-" NerdTree
-" ----------------------------------------------------------------------------
-let g:NERDTreeShowHidden = 1
-let g:NERDTreeMinimalUI = 1
-let g:NERDTreeIgnore = []
-let g:NERDTreeStatusline = ''
-" Automaticaly close nvim if NERDTree is only thing left open
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-" Toggle
-nnoremap <silent> <C-b> :NERDTreeToggle<CR>
-
-
-map <leader>vi :tabe ~/.config/nvim/init.vim<CR>
-map <leader>svi :so ~/.config/nvim/init.vim<CR>
-" split right
-map <leader>vs :vsplit<CR>
-" split below
-map <leader>hs :split<CR>
-" Open a new tab
-map <leader>t :tabe<CR>
-
-
-" chnage colors, this might go away
- map <leader>fco :Colors<CR>
-
-" Open new split panes to right and bottom, which feels more natural
-set splitbelow
+" open new split panes to right and below
 set splitright
-set number
+set splitbelow
+" turn terminal to normal mode with escape
+tnoremap <Esc> <C-\><C-n>
+" start terminal in insert mode
+au BufEnter * if &buftype == 'terminal' | :startinsert | endif
+" open terminal on ctrl+n
+function! OpenTerminal()
+  split term://zsh
+  resize 25
+endfunction
+nnoremap <c-n> :call OpenTerminal()<CR>
+map <Leader>tt :terminal<CR>   
+
+" - - - - - - - - - - - - - - - - - - - - -
+" Commands
+" - - - - - - - - - - - - - - - - - - - - -
+let mapleader = ','
+
+" move from insert to normal mode
+inoremap nn <esc>
 
 " Quicker window movement
+" need to fix the iterm perferences on c-h and c-j
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
-"  Bind K to grep word under cursor
-nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
-noremap <space> :
-" The Silver Searcher
+map <leader>w :w<CR>
+map <leader>q :wq<CR>
+map <leader>qq :q<CR>
+map <leader>n :NERDTreeFocus<CR>
+" the thing that sucks about GFiles as apose to Files is it will not inlcude
+" new files unless they have been commited
+map <leader>f :GFiles<CR>
+map <leader>ff :Ag<CR>
+map <leader>l :Buffers<CR>
+"clear the highlight
+map <leader><space> :noh<CR>
+ " this does not work
+map <leader>jj <esc><CR>
+map <leader>d :Dash<CR>
 
-" ----------------------------------------------------------------------------
-" Neovim Terminal
-" ----------------------------------------------------------------------------
-" highlight TermCursor ctermfg=red guifg=red
-"au BufEnter * if &buftype == 'terminal' | :startinsert | endif
-autocmd TermOpen * set bufhidden=hide
-tnoremap <C-j> <C-\><C-n><C-w>j
-tnoremap <C-h> <C-\><C-n><C-w>h
-tnoremap <C-k> <C-\><C-n><C-w>k
-tnoremap <C-l> <C-\><C-n><C-w>l
+" spell check
+map <leader>s :setlocal spell! spelllang=en_us<CR>
 
-" ----------------------------------------------------------------------------
-" <Leader>?/! | Google it / Feeling lucky
-" super cool, cursor in word you want to look up then <leader>? will google
-" that word
-" ----------------------------------------------------------------------------
-function! s:goog(pat, lucky)
-  let q = '"'.substitute(a:pat, '["\n]', ' ', 'g').'"'
-  let q = substitute(q, '[[:punct:] ]',
-       \ '\=printf("%%%02X", char2nr(submatch(0)))', 'g')
-  call system(printf('open "https://www.google.com/search?%sq=%s"',
-                   \ a:lucky ? 'btnI&' : '', q))
-endfunction
+" - - - - - - - - - - - - - - - - - - - - -
+" Set
+" - - - - - - - - - - - - - - - - - - - - -
+"   set system clipboard, need to have some sort of system clipboard installed
+" - - - - - - - - - - - - - - - - - - - - -
+" Basic settings
+" - - - - - - - - - - - - - - - - - - - - -
+set mouse=a
+set termguicolors
+set clipboard+=unnamedplus
+set ruler
+set colorcolumn=80
+set background=dark
+highlight ColorColumn ctermbg=0 guibg=#000000
+set number
+set nowrap
+set smartcase
+set hlsearch
+set noerrorbells
 
-nnoremap <leader>? :call <SID>goog(expand("<cWORD>"), 0)<cr>
-nnoremap <leader>! :call <SID>goog(expand("<cWORD>"), 1)<cr>
-xnoremap <leader>? "gy:call <SID>goog(@g, 0)<cr>gv
-xnoremap <leader>! "gy:call <SID>goog(@g, 1)<cr>gv
+set expandtab
+set shiftwidth=2
+set softtabstop=2
+set tabstop=2
+
+set smartindent
+set cursorline
+set cursorcolumn
+
+set wildmode=longest,list,full
+
+" status bar at the bottome
+set noshowmode
 
 
-" ----------------------------------------------------------------------------
-" WEBSITES TO THE PLUGIN
-"
-" this was to get the fonts to work for nerdtree, altered my terminal profile
-" https://github.com/ryanoasis/vim-devicons
-" https://github.com/ryanoasis/nerd-fonts#font-installation
-" Go here to see more color themes then type ,fco to get new ones
-" 
-" Arline themes for the status bar below and I think above
-" https://github.com/vim-airline/vim-airline/wiki/Screenshots
-" To change themes do this:
-" :AirlineTheme <theme>
-" ----------------------------------------------------------------------------
+" - - - - - - - - - - - - - - - - - - - - -
+" Configure plugs YO
+" - - - - - - - - - - - - - - - - - - - - -
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ }
+
+" set backspace=indent,eol,start  " Makes backspace key more powerful. I don't
+" like this I don't think
+
+" YouCompleteMe
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_min_num_of_chars_for_completion = 1
+
+" Source Vim configuration file and install plugins
+nnoremap <silent><leader>1 :source ~/.config/nvim/init.vim \| :PlugInstall<CR>
+
+
