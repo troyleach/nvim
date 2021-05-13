@@ -139,10 +139,11 @@ set wildmode=longest,list,full
 " status bar at the bottome
 set noshowmode
 
-
 " - - - - - - - - - - - - - - - - - - - - -
 " Configure plugs YO
 " - - - - - - - - - - - - - - - - - - - - -
+let NERDTreeShowHidden=1
+
 let g:lightline = {
       \ 'colorscheme': 'wombat',
       \ }

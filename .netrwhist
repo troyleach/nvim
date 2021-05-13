@@ -1,6 +1,3 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =4
-let g:netrw_dirhist_1='/Users/troyleach/canceriq/specialist/app/assets/genetic_test_templates/myriad'
-let g:netrw_dirhist_2='/Users/troyleach/.config/nvim'
-let g:netrw_dirhist_3='/Users/troyleach/.config'
-let g:netrw_dirhist_4='/Users/troyleach/.config/nvim'
+let g:netrw_dirhistcnt =1
+let g:netrw_dirhist_1='/Users/A483263/.config/nvim'
