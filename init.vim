@@ -22,8 +22,7 @@ Plug 'preservim/nerdtree'
 
 " I think there is a better way to search other then this ctrl p thing
 " Plug 'ctrlpvim/ctrlp.vim' DELETE 
-"
-" Not sure about this one either, doesn't seem to work to well
+" extenstions https://github.com/neoclide/coc.nvim/wiki/Using-coc-extensions
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " s
@@ -45,6 +44,10 @@ Plug 'tpope/vim-endwise'
 " adding dash docs to vim - leader d then watch the magic yo
 Plug 'rizzatti/dash.vim'
 
+" Plugs for JS
+Plug 'yuezk/vim-js'
+Plug 'HerringtonDarkholme/yats.vim'
+Plug 'maxmellon/vim-jsx-pretty'
 
 " Initialize plugin system
 call plug#end()
@@ -105,6 +108,7 @@ map <leader>d :Dash<CR>
 " spell check
 map <leader>s :setlocal spell! spelllang=en_us<CR>
 
+let g:coc_global_extensions = ['coc-tslint-plugin', 'coc-tsserver', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier']  " list of CoC extensions needed
 " - - - - - - - - - - - - - - - - - - - - -
 " Set
 " - - - - - - - - - - - - - - - - - - - - -
