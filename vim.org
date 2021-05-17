@@ -1,3 +1,4 @@
 * Things VIM (nvim)
 
 [] [a simple vim config -- not really simple](https://github.com/rafi/vim-config)
+[] [this video seems cool](https://www.youtube.com/watch?v=ZEFXeRIFvN0&t=350s)

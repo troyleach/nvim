@@ -55,27 +55,6 @@ call plug#end()
 colorscheme gruvbox
 
 " - - - - - - - - - - - - - - - - - - - - -
-" Terminal
-" - - - - - - - - - - - - - - - - - - - - -
-" open a terminal in $PWD
-
-
-" open new split panes to right and below
-set splitright
-set splitbelow
-" turn terminal to normal mode with escape
-tnoremap <Esc> <C-\><C-n>
-" start terminal in insert mode
-au BufEnter * if &buftype == 'terminal' | :startinsert | endif
-" open terminal on ctrl+n
-function! OpenTerminal()
-  split term://zsh
-  resize 25
-endfunction
-nnoremap <c-n> :call OpenTerminal()<CR>
-map <Leader>tt :terminal<CR>   
-
-" - - - - - - - - - - - - - - - - - - - - -
 " Commands
 " - - - - - - - - - - - - - - - - - - - - -
 let mapleader = ','
@@ -104,6 +83,8 @@ map <leader><space> :noh<CR>
  " this does not work
 map <leader>jj <esc><CR>
 map <leader>d :Dash<CR>
+
+map <leader>tt :terminal<CR>   
 
 " spell check
 map <leader>s :setlocal spell! spelllang=en_us<CR>
@@ -146,6 +127,27 @@ set noshowmode
 " - - - - - - - - - - - - - - - - - - - - -
 " Configure plugs YO
 " - - - - - - - - - - - - - - - - - - - - -
+"
+" - - - - - - - - - - - - - - - - - - - - -
+" Terminal
+" - - - - - - - - - - - - - - - - - - - - -
+" open a terminal in $PWD
+
+
+" open new split panes to right and below
+set splitright
+set splitbelow
+" turn terminal to normal mode with escape
+tnoremap <Esc> <C-\><C-n>
+" start terminal in insert mode
+au BufEnter * if &buftype == 'terminal' | :startinsert | endif
+" open terminal on ctrl+n
+function! OpenTerminal()
+  split term://zsh
+  resize 25
+endfunction
+nnoremap <c-n> :call OpenTerminal()<CR>
+
 let NERDTreeShowHidden=1
 
 let g:lightline = {
