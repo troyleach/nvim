@@ -44,6 +44,11 @@ Plug 'tpope/vim-endwise'
 " adding dash docs to vim - leader d then watch the magic yo
 Plug 'rizzatti/dash.vim'
 
+" Languages and syntaxes
+Plug 'othree/html5.vim'
+Plug 'mattn/emmet-vim'
+Plug 'iloginow/vim-stylus'
+
 " Plugs for JS
 Plug 'yuezk/vim-js'
 Plug 'HerringtonDarkholme/yats.vim'
@@ -90,6 +95,7 @@ map <leader>tt :terminal<CR>
 map <leader>s :setlocal spell! spelllang=en_us<CR>
 
 let g:coc_global_extensions = ['coc-tslint-plugin', 'coc-tsserver', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier']  " list of CoC extensions needed
+
 " - - - - - - - - - - - - - - - - - - - - -
 " Set
 " - - - - - - - - - - - - - - - - - - - - -
@@ -123,6 +129,24 @@ set wildmode=longest,list,full
 
 " status bar at the bottome
 set noshowmode
+
+
+
+" - - - - - - - - - - - - - - - - - - - - -
+" Emmet stuff
+" - - - - - - - - - - - - - - - - - - - - -
+let g:user_emmet_install_global = 0
+autocmd FileType html,css EmmetInstall
+
+" - - - - - - - - - - - - - - - - - - - - -
+" Autocompletion vim style
+" - - - - - - - - - - - - - - - - - - - - -
+
+filetype plugin on
+
+autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+" set omnifunc=syntaxcomplete#Complete
+" that added the CSS at the end
 
 " - - - - - - - - - - - - - - - - - - - - -
 " Configure plugs YO
