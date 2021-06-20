@@ -1,4 +1,9 @@
 * Things VIM (nvim)
 
-[] [a simple vim config -- not really simple](https://github.com/rafi/vim-config)
-[] [this video seems cool](https://www.youtube.com/watch?v=ZEFXeRIFvN0&t=350s)
+[ ] [Tim Pope, need I say more](https://github.com/tpope)
+[ ] [a simple vim config -- not really simple](https://github.com/rafi/vim-config)
+[ ] [this video seems cool](https://www.youtube.com/watch?v=ZEFXeRIFvN0&t=350s)
+[ ] [setting up neovim in 2020](https://betterprogramming.pub/setting-up-neovim-for-web-development-in-2020-d800de3efacd)
+[ ] [neovim setup for osx users](https://gist.github.com/celso/6cefedb9fce92827ee38e8f7411b8b30)
+[ ] [good read on workflow with fzf](https://pragmaticpineapple.com/improving-vim-workflow-with-fzf/)
+[ ] [terminal in neovim](http://vid.bina.me/tools/nvim/terminal-in-nvim/)
