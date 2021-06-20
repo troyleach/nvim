@@ -6,7 +6,11 @@
 " - - - - - - - - - - - - - - - - - - - - -
 
 set nocompatible		" be iMproved, required
-filetype off			  " required
+syntax on " Enable syntax highlighting
+filetype on			    " required NOTE: this was off, then when using ruby I have to turn it on
+filetype indent on			    
+filetype plugin on  " Enable filetype-specific plugins			    
+
 
 " - - - - - - - - - - - - - - - - - - - - -
 " Plug in for this mean stuff
@@ -21,12 +25,13 @@ Plug 'tpope/vim-fugitive'
 Plug 'preservim/nerdtree'
 
 " I think there is a better way to search other then this ctrl p thing
-" Plug 'ctrlpvim/ctrlp.vim' DELETE 
+Plug 'ctrlpvim/ctrlp.vim' 
 " extenstions https://github.com/neoclide/coc.nvim/wiki/Using-coc-extensions
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " s
 " fzf search
+" Also need ack == brew install ack
 " must install silver_searcher https://github.com/ggreer/the_silver_searcher
 " brew install the_silver_searcher
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -38,8 +43,9 @@ Plug 'jiangmiao/auto-pairs'
 " comment out code
 Plug 'tpope/vim-commentary'
 
-" add the end for ruby
+" For Ruby development
 Plug 'tpope/vim-endwise'
+Plug 'vim-ruby/vim-ruby'
 
 " adding dash docs to vim - leader d then watch the magic yo
 Plug 'rizzatti/dash.vim'
@@ -48,6 +54,9 @@ Plug 'rizzatti/dash.vim'
 Plug 'yuezk/vim-js'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'maxmellon/vim-jsx-pretty'
+
+" surround words with things
+Plug 'tpope/vim-surround'
 
 " Initialize plugin system
 call plug#end()
@@ -70,8 +79,7 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
 map <leader>w :w<CR>
-map <leader>q :wq<CR>
-map <leader>qq :q<CR>
+map <leader>q :q<CR>
 map <leader>n :NERDTreeFocus<CR>
 " the thing that sucks about GFiles as apose to Files is it will not inlcude
 " new files unless they have been commited
@@ -88,6 +96,11 @@ map <leader>tt :terminal<CR>
 
 " spell check
 map <leader>s :setlocal spell! spelllang=en_us<CR>
+
+" messing off
+map <leader>b :vertical resize +60<CR>
+map <leader>b <C-w>=<CR>
+
 
 let g:coc_global_extensions = ['coc-tslint-plugin', 'coc-tsserver', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier']  " list of CoC extensions needed
 " - - - - - - - - - - - - - - - - - - - - -
@@ -124,15 +137,42 @@ set wildmode=longest,list,full
 " status bar at the bottome
 set noshowmode
 
+"need to look into this more and if this something I want to do
+set modifiable
+
+" to reload files if changed
+" actually not sure this will do what I think see this if I get into trouble
+" https://vi.stackexchange.com/questions/444/how-do-i-reload-the-current-file/13092#13092
+set autoread
+
 " - - - - - - - - - - - - - - - - - - - - -
 " Configure plugs YO
 " - - - - - - - - - - - - - - - - - - - - -
 "
 " - - - - - - - - - - - - - - - - - - - - -
+" Functions
+" - - - - - - - - - - - - - - - - - - - - -
+
+ let s:toggleWindowSize = 1
+
+function! ToggleWindowSize()
+
+  if s:toggleWindowSize
+    :vertical resize +60
+    let s:toggleWindowSize = 0
+  else
+    let s:toggleWindowSize = 1
+    :exe "normal! \<C-w>\="
+  endif
+
+endfunction
+
+map <leader>b :call ToggleWindowSize()<CR>
+
+" - - - - - - - - - - - - - - - - - - - - -
 " Terminal
 " - - - - - - - - - - - - - - - - - - - - -
 " open a terminal in $PWD
-
 
 " open new split panes to right and below
 set splitright
@@ -144,7 +184,7 @@ au BufEnter * if &buftype == 'terminal' | :startinsert | endif
 " open terminal on ctrl+n
 function! OpenTerminal()
   split term://zsh
-  resize 25
+  resize 15
 endfunction
 nnoremap <c-n> :call OpenTerminal()<CR>
 
