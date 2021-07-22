@@ -14,6 +14,7 @@ filetype plugin on  " Enable filetype-specific plugins
 
 " - - - - - - - - - - - - - - - - - - - - -
 " Plug in for this mean stuff
+" To remove a plug in remove the line, exit then get back in and run :PlugClean and follow direcitons
 " - - - - - - - - - - - - - - - - - - - - -
 call plug#begin('~/.config/nvim/plugged')
 " theme stuff
@@ -22,6 +23,7 @@ Plug 'itchyny/lightline.vim'
 
 " github
 Plug 'tpope/vim-fugitive'
+
 Plug 'preservim/nerdtree'
 
 " I think there is a better way to search other then this ctrl p thing
@@ -62,6 +64,14 @@ Plug 'maxmellon/vim-jsx-pretty'
 
 " surround words with things
 Plug 'tpope/vim-surround'
+
+" swaping windows
+" https://github.com/wesQ3/vim-windowswap
+Plug 'wesQ3/vim-windowswap'
+
+" Zoom into the current window, then press again and zoom back to the last set
+" of windows that were open
+" Plug 'vim-scripts/ZoomWin'
 
 " Initialize plugin system
 call plug#end()
@@ -140,7 +150,9 @@ set cursorcolumn
 
 set wildmode=longest,list,full
 
-" status bar at the bottome
+" - - - - - - - - - - - - - - - - - - - - -
+" status bar at the bottom
+" - - - - - - - - - - - - - - - - - - - - -
 set noshowmode
 
 
@@ -179,7 +191,6 @@ set autoread
  let s:toggleWindowSize = 1
 
 function! ToggleWindowSize()
-
   if s:toggleWindowSize
     :vertical resize +60
     let s:toggleWindowSize = 0
@@ -187,10 +198,26 @@ function! ToggleWindowSize()
     let s:toggleWindowSize = 1
     :exe "normal! \<C-w>\="
   endif
-
 endfunction
 
 map <leader>b :call ToggleWindowSize()<CR>
+
+" Got this bit from: https://thoughtbot.com/blog/faster-grepping-in-vim
+" The Silver Searcher
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+endif
+
+" bind K to grep word under cursor
+nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+
 
 " - - - - - - - - - - - - - - - - - - - - -
 " Terminal
@@ -213,8 +240,20 @@ nnoremap <c-n> :call OpenTerminal()<CR>
 
 let NERDTreeShowHidden=1
 
+      " \ 'colorscheme': 'wombat',
 let g:lightline = {
-      \ 'colorscheme': 'wombat',
+      \ 'colorscheme': 'one',
+      \ 'active': {
+      \   'left': [ ['mode', 'paste'],
+      \             ['gitbranch', 'readonly', 'filename', 'modified', 'hitroy']]
+      \ },
+      \ 'component': {
+      \   'hitroy': 'Troy, have a GREAT day',
+      \   'filename': '%f',
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead'
+      \ },
       \ }
 
 " set backspace=indent,eol,start  " Makes backspace key more powerful. I don't
